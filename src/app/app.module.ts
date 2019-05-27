@@ -5,6 +5,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 
+import { Router } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -12,12 +16,16 @@ import { LayoutModule } from './layout/layout.module';
   imports: [
     BrowserModule,
     FormsModule,
-    LayoutModule
+    LayoutModule,
+    // MUST BE LAST
+    AppRoutingModule
   ],
   providers: [
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-
+  constructor(router: Router) {
+    console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
+  }
 }
