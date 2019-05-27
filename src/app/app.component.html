@@ -23,7 +23,11 @@
         </nav>
 
         <div class="container">
-          
+          <router-outlet
+            (activate)='onActivate($event)'
+            (deactivate)='onDeactivate($event)'>
+          </router-outlet>
+          <!-- Routed views go here -->
         </div>
-    </div> 
+    </div>
 </div>
