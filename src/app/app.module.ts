@@ -7,6 +7,7 @@ import { LayoutModule } from './layout/layout.module';
 
 import { Router } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { TasksModule } from './tasks/tasks.module';
 
 
 @NgModule({
@@ -17,8 +18,9 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     FormsModule,
     LayoutModule,
+    TasksModule,
     // MUST BE LAST
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
   ],
