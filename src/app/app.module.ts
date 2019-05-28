@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { TasksModule } from './tasks/tasks.module';
 import { CoreModule } from './core/core.module';
+import { UsersModule } from './users/users.module';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { CoreModule } from './core/core.module';
     LayoutModule,
     CoreModule,
     TasksModule,
+    UsersModule,
     // MUST BE LAST
     AppRoutingModule,
   ],
