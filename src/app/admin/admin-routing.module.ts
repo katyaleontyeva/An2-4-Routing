@@ -14,6 +14,7 @@ const routes: Routes = [
       {
         path: '',
         // Skip creating some component with <router-outlet>, children have common guard
+        canActivateChild: [AuthGuard],
         children: [
           { path: 'users', component: ManageUsersComponent },
           { path: 'tasks', component: ManageTasksComponent },
