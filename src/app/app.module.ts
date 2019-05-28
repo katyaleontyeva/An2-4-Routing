@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { TasksModule } from './tasks/tasks.module';
 import { CoreModule } from './core/core.module';
 import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     CoreModule,
     TasksModule,
     UsersModule,
+    AdminModule,
     // MUST BE LAST
     AppRoutingModule,
   ],
