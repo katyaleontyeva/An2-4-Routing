@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules, ExtraOptions } from '@angular/router';
 
 import { AboutComponent, PathNotFoundComponent, MessagesComponent, LoginComponent } from './layout';
-import { AuthGuard } from './core';
+import { AuthGuard, CustomPreloadingStrategyService } from './core';
 
 const routes: Routes = [
   {
@@ -30,7 +30,8 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    loadChildren: './users/users.module#UsersModule'
+    loadChildren: './users/users.module#UsersModule',
+    data: { preload: true }
   },
   {
     // The router will match this route if the URL requested
@@ -41,7 +42,8 @@ const routes: Routes = [
 ];
 
 const extraOptions: ExtraOptions = {
-  preloadingStrategy: PreloadAllModules,
+  // preloadingStrategy: PreloadAllModules,
+  preloadingStrategy: CustomPreloadingStrategyService,
   enableTracing: true // Makes the router log all its internal events to the console.
 };
 
