@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+
 
 // rxjs
 import { Observable } from 'rxjs';
@@ -13,6 +15,7 @@ import { UserArrayService } from './../../services/user-array.service';
 })
 export class UserListComponent implements OnInit {
   users$: Observable<Array<UserModel>>; // $ означает что это Observable
+  private editedUser: UserModel;
 
   constructor(
     private userArrayService: UserArrayService,
@@ -22,6 +25,18 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.users$ = this.userArrayService.getUsers();
+
+    this.route.paramMap
+      .pipe(
+        switchMap((params: Params) => this.userArrayService.getUser(+params.get('editedUserID')))
+      )
+      .subscribe(
+        (user: UserModel) => {
+          this.editedUser = {...user};
+          console.log(`Last time you edited user ${JSON.stringify(this.editedUser)}`);
+        },
+        err => console.log(err)
+      );
   }
 
   onEditUser(user: UserModel) {
@@ -30,5 +45,12 @@ export class UserListComponent implements OnInit {
     // or
     // const link = ['edit', user.id];
     // this.router.navigate(link, {relativeTo: this.route});
+  }
+
+  isEdited(user: UserModel) {
+    if (this.editedUser) {
+      return user.id === this.editedUser.id;
+    }
+    return false;
   }
 }
