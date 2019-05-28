@@ -23,6 +23,14 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'admin',
+    loadChildren: './admin/admin.module#AdminModule'
+  },
+  {
+    path: 'users',
+    loadChildren: './users/users.module#UsersModule'
+  },
+  {
     // The router will match this route if the URL requested
     // doesn't match any paths for routes defined in our configuration
     path: '**',

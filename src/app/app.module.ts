@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { TasksModule } from './tasks/tasks.module';
 import { CoreModule } from './core/core.module';
-import { UsersModule } from './users/users.module';
-import { AdminModule } from './admin/admin.module';
+// import { UsersModule } from './users/users.module'; // Lazy
+// import { AdminModule } from './admin/admin.module'; // Lazy
 import { SharedModule } from './shared/shared.module';
 
 
@@ -25,8 +25,6 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     SharedModule,
     TasksModule,
-    UsersModule,
-    AdminModule,
     // MUST BE LAST
     AppRoutingModule,
   ],
