@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // rxjs
 import { Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(
     private userArrayService: UserArrayService,
     private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,8 +51,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
       this.userArrayService.createUser(user);
     }
     this.originalUser = {...this.user};
+
+    this.onGoBack();
   }
 
   onGoBack() {
+    // this.router.navigate(['./../../'], { relativeTo: this.route}); это не понятно!
+    this.router.navigate(['/users']); // так лучше
   }
 }
