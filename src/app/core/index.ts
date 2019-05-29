@@ -6,6 +6,8 @@ export * from './services/custom-preloading-strategy.service';
 
 export * from './interfaces/can-component-deactivate.interface';
 
+export * from './decorators';
+
 export * from './guards/can-deactivate.guard';
 export * from './guards/auth.guard';
 

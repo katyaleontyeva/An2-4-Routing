@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common'; // Навигация по истории браузера
 
@@ -8,14 +8,15 @@ import { pluck } from 'rxjs/operators';
 
 import { UserModel } from './../../models/user.model';
 import { UserArrayService, UserObservableService } from './../../services';
-import { DialogService, CanComponentDeactivate } from './../../../core';
+import { AutoUnsubscribe, DialogService, CanComponentDeactivate } from './../../../core';
 
 
 @Component({
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
-export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+@AutoUnsubscribe()
+export class UserFormComponent implements OnInit, CanComponentDeactivate {
   user: UserModel; // юзер который мутируется
   originalUser: UserModel; // оригинальный юзер
 
@@ -70,11 +71,13 @@ export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactiv
   // ngOnDestroy() {
   //   this.sub.unsubscribe();
   // }
-  ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
+
+  // Вместо этого используем декоратор AutoUnsubscribe
+  // ngOnDestroy(): void {
+  //   if (this.sub) {
+  //     this.sub.unsubscribe();
+  //   }
+  // }
 
   onSaveUser() {
     const user = {...this.user};
