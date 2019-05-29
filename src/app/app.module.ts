@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
@@ -13,6 +13,7 @@ import { CoreModule } from './core/core.module';
 // import { UsersModule } from './users/users.module'; // Lazy
 // import { AdminModule } from './admin/admin.module'; // Lazy
 import { SharedModule } from './shared/shared.module';
+import { MyInterceptor } from './core/interceptors/my.interceptor';
 
 
 @NgModule({
@@ -31,6 +32,11 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })
