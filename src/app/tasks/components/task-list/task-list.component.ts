@@ -52,7 +52,7 @@ export class TaskListComponent implements OnInit {
       done: true
     });
 
-    // Это чтобы не делать еще раз запрос на получение измененного массива
+    // Это чтобы не делать еще раз запрос на получение измененного массива (как в onDeleteTask)
     const tasks: TaskModel[] = await this.tasks;
     const index = tasks.findIndex(t => t.id === updatedTask.id);
     tasks[index] = { ...updatedTask };
