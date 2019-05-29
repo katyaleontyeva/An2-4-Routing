@@ -13,7 +13,7 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private taskArrayService: TaskArrayService,
+    // private taskArrayService: TaskArrayService,
     private taskPromiseService: TaskPromiseService
   ) {}
 
@@ -24,11 +24,25 @@ export class TaskListComponent implements OnInit {
 
   onCompleteTask(task: TaskModel): void {
     const updatedTask = { ...task, done: true };
-    this.taskArrayService.updateTask(updatedTask);
+    // this.taskArrayService.updateTask(updatedTask);
+    this.updateTask(task)
+      .catch(err => console.log(err));
   }
 
   onEditTask(task: TaskModel): void {
     const link = ['/edit', task.id];
     this.router.navigate(link);
+  }
+
+  private async updateTask(task: TaskModel) {
+    const updatedTask = await this.taskPromiseService.updateTask({
+      ...task,
+      done: true
+    });
+
+    // Это чтобы не делать еще раз запрос на получение измененного массива
+    const tasks: TaskModel[] = await this.tasks;
+    const index = tasks.findIndex(t => t.id === updatedTask.id);
+    tasks[index] = { ...updatedTask };
   }
 }
