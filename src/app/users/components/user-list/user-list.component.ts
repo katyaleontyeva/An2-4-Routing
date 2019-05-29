@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators';
 
 
 // rxjs
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { UserModel } from './../../models/user.model';
 import { UserArrayService, UserObservableService } from './../../services';
@@ -18,7 +18,7 @@ export class UserListComponent implements OnInit {
   private editedUser: UserModel;
 
   constructor(
-    private userArrayService: UserArrayService,
+    // private userArrayService: UserArrayService,
     private userObservableService: UserObservableService,
     private router: Router,
     private route: ActivatedRoute,
@@ -26,11 +26,18 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     // this.users$ = this.userArrayService.getUsers();
+    // version with Observable
     this.users$ = this.userObservableService.getUsers();
 
     this.route.paramMap
       .pipe(
-        switchMap((params: Params) => this.userArrayService.getUser(+params.get('editedUserID')))
+        // switchMap((params: Params) => this.userArrayService.getUser(+params.get('editedUserID')))
+        // version with Observable
+        switchMap((params: Params) => {
+          return params.get('editedUserID')
+            ? this.userObservableService.getUser(+params.get('editedUserID'))
+            : of(null);
+        })
       )
       .subscribe(
         (user: UserModel) => {
