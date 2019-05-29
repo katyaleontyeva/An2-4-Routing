@@ -16,7 +16,7 @@ export class TaskFormComponent implements OnInit {
   task: TaskModel;
 
   constructor(
-    private taskArrayService: TaskArrayService,
+    // private taskArrayService: TaskArrayService,
     private taskPromiseService: TaskPromiseService,
     private router: Router,
     private route: ActivatedRoute
@@ -30,7 +30,13 @@ export class TaskFormComponent implements OnInit {
     this.route.paramMap
       .pipe(
         // switchMap((params: Params) => this.taskArrayService.getTask(+params.get('taskID'))))
-        switchMap((params: Params) => this.taskPromiseService.getTask(+params.get('taskID'))))
+        switchMap((params: Params) => {
+          return params.get('taskID')
+            ? this.taskPromiseService.getTask(+params.get('taskID'))
+            // when Promise.resolve(null) => task = null => {...null} => {}
+            : Promise.resolve(null);
+        })
+      )
       .subscribe(
         task => this.task = {...task},
         err => console.log(err)
@@ -41,14 +47,18 @@ export class TaskFormComponent implements OnInit {
   onSaveTask() {
     const task = {...this.task};
 
-    if (task.id) {
-      // this.taskArrayService.updateTask(task);
-      this.taskPromiseService.updateTask(task)
-        .then( () => this.onGoBack() );
-    } else {
-      this.taskArrayService.createTask(task);
-      this.onGoBack();
-    }
+    // if (task.id) {
+    //   this.taskArrayService.updateTask(task);
+    // } else {
+    //   this.taskArrayService.createTask(task);
+    // }
+    // this.onGoBack();
+
+    const method = task.id ? 'updateTask' : 'createTask';
+    this.taskPromiseService[method](task)
+      .then(() => this.onGoBack())
+      .catch(err => console.log(err));
+
   }
 
   onGoBack(): void {

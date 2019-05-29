@@ -4,7 +4,8 @@
       "id": 1,
       "action": "Estimate",
       "priority": 1,
-      "estHours": 8
+      "estHours": 8,
+      "done": true
     },
     {
       "id": 2,
