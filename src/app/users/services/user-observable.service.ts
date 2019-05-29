@@ -36,10 +36,30 @@ export class UserObservableService {
         catchError(this.handleError)
       );
   }
+  updateUser(user: UserModel): Observable<UserModel> {
+    const url = `${this.usersUrl}/${user.id}`,
+      body = JSON.stringify(user),
+      options = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      };
 
-  updateUser(user: UserModel) {}
+    return this.http
+      .put<UserModel>(url, body, options)
+      .pipe( catchError(this.handleError) );
+  }
 
-  createUser(user: UserModel) {}
+  createUser(user: UserModel): Observable<UserModel> {
+    const url = this.usersUrl,
+      body = JSON.stringify(user),
+      options = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      };
+    return this.http
+      .post<UserModel>(url, body, options)
+      .pipe(
+        catchError( this.handleError )
+      );
+  }
 
   deleteUser(user: UserModel) {}
 
