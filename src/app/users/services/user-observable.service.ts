@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { concatMap, catchError } from 'rxjs/operators';
 
 import { UserModel } from './../models/user.model';
 import { UsersAPI } from './../users.config';
@@ -61,7 +61,17 @@ export class UserObservableService {
       );
   }
 
-  deleteUser(user: UserModel) {}
+  // Возвращает массив моделей пользователей которые остались после удаления
+  deleteUser(user: UserModel): Observable<UserModel[]> {
+    const url = `${this.usersUrl}/${user.id}`;
+
+    return this.http.delete(url)
+      .pipe(
+        // switchMap отменяет предыдущие результаты, использует только последние, поэтому обычно в get
+        // concatMap не отменяет
+        concatMap(() => this.getUsers())
+      );
+  }
 
   private handleError(err: HttpErrorResponse) {
     let errorMessage: string;

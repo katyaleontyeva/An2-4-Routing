@@ -2,5 +2,6 @@
   *ngFor="let user of users$ | async"
   [user]="user"
   (editUser)="onEditUser($event)"
+  (deleteUser)="onDeleteUser($event)"
   [class.edited]="isEdited(user)">
 </app-user>
