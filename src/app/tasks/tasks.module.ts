@@ -7,7 +7,8 @@ import { StoreModule } from '@ngrx/store';
 import { TasksRoutingModule } from './tasks-routing.module';
 import { TasksServicesModule } from './tasks-services.module';
 import { TaskListComponent, TaskComponent, TaskFormComponent } from './components';
-import { tasksReducer } from '../core/+store/tasks/tasks.reducer';
+import { TasksEffects, tasksReducer } from '../core/+store/tasks';
+import { EffectsModule } from '@ngrx/effects';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { tasksReducer } from '../core/+store/tasks/tasks.reducer';
     FormsModule,
     TasksRoutingModule,
     TasksServicesModule,
-    StoreModule.forFeature('tasks', tasksReducer)
+    StoreModule.forFeature('tasks', tasksReducer),
+    EffectsModule.forFeature([TasksEffects])
   ],
   declarations: [
     TaskListComponent,

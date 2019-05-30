@@ -5,11 +5,13 @@ import { environment } from './../../../environments/environment';
 
 // @Ngrx
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
     CommonModule,
     StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   declarations: []
