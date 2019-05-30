@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 // @Ngrx
 import { Store, select } from '@ngrx/store';
-import { AppState, TasksState } from './../../../core/+store';
+import { AppState, getTasksData, getTasksError } from './../../../core/+store';
 import * as TasksActions from './../../../core/+store/tasks/tasks.actions';
 
 // rxjs
@@ -17,8 +17,9 @@ import { TaskModel } from './../../models/task.model';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
-  tasks: Promise<Array<TaskModel>>;
-  tasksState$: Observable<TasksState>;
+  tasks$: Observable<ReadonlyArray<TaskModel>>;
+  tasksError$: Observable<Error | string>;
+
 
   constructor(
     private router: Router,
@@ -29,7 +30,10 @@ export class TaskListComponent implements OnInit {
     console.log('We have a store! ', this.store);
     // Подписываемся на получение данных из Store
     // При изменении State будет обновляться автоматически
-    this.tasksState$ = this.store.pipe(select('tasks'));
+    // this.tasksState$ = this.store.pipe(select(getTasksState));
+
+    this.tasks$ = this.store.pipe(select(getTasksData));
+    this.tasksError$ = this.store.pipe(select(getTasksError));
 
     // Диспатчим экшен который запускает цепочку получения данных
     this.store.dispatch(new TasksActions.GetTasks());
