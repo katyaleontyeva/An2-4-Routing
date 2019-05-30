@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { TaskModel } from './../../models/task.model';
-import { TaskPromiseService } from './../../services';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -26,7 +25,6 @@ export class TaskFormComponent implements OnInit {
   private sub: Subscription;
 
   constructor(
-    private taskPromiseService: TaskPromiseService,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>
@@ -51,11 +49,11 @@ export class TaskFormComponent implements OnInit {
   onSaveTask() {
     const task = {...this.task};
 
-    const method = task.id ? 'updateTask' : 'createTask';
-    this.taskPromiseService[method](task)
-      .then(() => this.onGoBack())
-      .catch(err => console.log(err));
-
+    if (task.id) {
+      this.store.dispatch(new TasksActions.UpdateTask(task));
+    } else {
+      this.store.dispatch(new TasksActions.CreateTask(task));
+    }
   }
 
   onGoBack(): void {

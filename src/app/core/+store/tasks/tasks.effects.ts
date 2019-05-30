@@ -7,9 +7,12 @@ import * as TasksActions from './tasks.actions'; // Иногда называю�
 
 // rxjs
 import { Observable } from 'rxjs';
-import { switchMap, pluck } from 'rxjs/operators';
+import { switchMap, pluck, concatMap } from 'rxjs/operators';
+
+import { Router } from '@angular/router';
 
 import { TaskPromiseService } from './../../../tasks/services';
+import { TaskModel } from '../../../tasks/models/task.model';
 
 
 @Injectable()
@@ -17,7 +20,8 @@ export class TasksEffects {
 
   constructor(
     private actions$: Actions, // Поток экшенов
-    private taskPromiseService: TaskPromiseService
+    private taskPromiseService: TaskPromiseService,
+    private router: Router,
   ) {
     console.log('[TASKS EFFECTS]');
   }
@@ -43,7 +47,7 @@ export class TasksEffects {
     // приходит поток экшенов {type:..., payload:...}
     pluck('payload'),
     // получаеся поток id
-    switchMap(payload =>
+    switchMap((payload: number) =>
       this.taskPromiseService
         .getTask(+payload)
         .then(task => new TasksActions.GetTaskSuccess(task))
@@ -51,6 +55,20 @@ export class TasksEffects {
     )
   );
 
+  @Effect()
+  updateTask$: Observable<Action> = this.actions$.pipe(
+    ofType<TasksActions.UpdateTask>(TasksActions.TasksActionTypes.UPDATE_TASK),
+    pluck('payload'),
+    concatMap((payload: TaskModel) =>
+      this.taskPromiseService
+        .updateTask(payload)
+        .then(task => {
+          this.router.navigate(['/home']);
+          return new TasksActions.UpdateTaskSuccess(task);
+        })
+        .catch(err => new TasksActions.UpdateTaskError(err))
+    )
+  );
 
 }
 
