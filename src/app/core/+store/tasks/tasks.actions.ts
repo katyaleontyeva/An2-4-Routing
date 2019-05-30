@@ -20,8 +20,10 @@ export enum TasksActionTypes {
   UPDATE_TASK_SUCCESS = '[Tasks] UPDATE_TASK_SUCCESS',
   UPDATE_TASK_ERROR   = '[Tasks] UPDATE_TASK_ERROR',
 
-  DONE_TASK = '[Tasks] DONE_TASK',
-  DELETE_TASK = '[Tasks] DELETE_TASK'
+  DELETE_TASK = '[Tasks] DELETE_TASK',
+  DELETE_TASK_SUCCESS = '[Tasks] DELETE_TASK_SUCCESS',
+  DELETE_TASK_ERROR = '[Tasks] DELETE_TASK_ERROR',
+
 }
 
 export class GetTasks implements Action {
@@ -83,14 +85,19 @@ export class UpdateTaskError implements Action {
   constructor(public payload: Error | string) { }
 }
 
-export class DoneTask implements Action {
-  readonly type = TasksActionTypes.DONE_TASK;
-  constructor(public payload: TaskModel) { }
-}
-
 export class DeleteTask implements Action {
   readonly type = TasksActionTypes.DELETE_TASK;
   constructor(public payload: TaskModel) { }
+}
+
+export class DeleteTaskSuccess implements Action {
+  readonly type = TasksActionTypes.DELETE_TASK_SUCCESS;
+  constructor(public payload: TaskModel) { }
+}
+
+export class DeleteTaskError implements Action {
+  readonly type = TasksActionTypes.DELETE_TASK_ERROR;
+  constructor(public payload: Error | string) { }
 }
 
 export type TasksActions
@@ -110,5 +117,6 @@ export type TasksActions
   | UpdateTaskSuccess
   | UpdateTaskError
 
-  | DoneTask
-  | DeleteTask;
+  | DeleteTask
+  | DeleteTaskSuccess
+  | DeleteTaskError;
