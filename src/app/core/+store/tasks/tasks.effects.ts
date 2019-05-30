@@ -7,7 +7,7 @@ import * as TasksActions from './tasks.actions'; // Иногда называю�
 
 // rxjs
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, pluck } from 'rxjs/operators';
 
 import { TaskPromiseService } from './../../../tasks/services';
 
@@ -22,7 +22,7 @@ export class TasksEffects {
     console.log('[TASKS EFFECTS]');
   }
 
-  @Effect()
+  @Effect() // свойство с декоратором
   getTasks$: Observable<Action> = this.actions$.pipe(
     // Instead of ofType<TasksActions.GetTasks>(...) you can use ofType(...)
     // It's optional.
@@ -36,6 +36,21 @@ export class TasksEffects {
         .catch(err => new TasksActions.GetTasksError(err))
     )
   );
+
+  @Effect()
+  getTask$: Observable<Action> = this.actions$.pipe(
+    ofType<TasksActions.GetTask>(TasksActions.TasksActionTypes.GET_TASK),
+    // приходит поток экшенов {type:..., payload:...}
+    pluck('payload'),
+    // получаеся поток id
+    switchMap(payload =>
+      this.taskPromiseService
+        .getTask(+payload)
+        .then(task => new TasksActions.GetTaskSuccess(task))
+        .catch(err => new TasksActions.GetTaskError(err))
+    )
+  );
+
 
 }
 
