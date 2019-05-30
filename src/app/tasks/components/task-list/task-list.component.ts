@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 // @Ngrx
 import { Store, select } from '@ngrx/store';
 import { AppState, TasksState } from './../../../core/+store';
+import * as TasksActions from './../../../core/+store/tasks/tasks.actions';
+
+// rxjs
 import { Observable } from 'rxjs';
 
 import { TaskModel } from './../../models/task.model';
-import { TaskArrayService, TaskPromiseService } from './../../services';
-import * as TasksActions from './../../../core/+store/tasks/tasks.actions';
+
 
 @Component({
   templateUrl: './task-list.component.html',
@@ -20,8 +22,6 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // private taskArrayService: TaskArrayService,
-    private taskPromiseService: TaskPromiseService,
     private store: Store<AppState>
   ) {}
 
@@ -30,6 +30,9 @@ export class TaskListComponent implements OnInit {
     // Подписываемся на получение данных из Store
     // При изменении State будет обновляться автоматически
     this.tasksState$ = this.store.pipe(select('tasks'));
+
+    // Диспатчим экшен который запускает цепочку получения данных
+    this.store.dispatch(new TasksActions.GetTasks());
   }
 
   onCompleteTask(task: TaskModel): void {
@@ -47,10 +50,7 @@ export class TaskListComponent implements OnInit {
   }
 
   onDeleteTask(task: TaskModel) {
-    this.taskPromiseService
-      .deleteTask(task)
-      .then(() => (this.tasks = this.taskPromiseService.getTasks()))
-      .catch(err => console.log(err));
+
   }
 
 }

@@ -12,7 +12,33 @@ export function tasksReducer(
   switch (action.type) {
     case TasksActionTypes.GET_TASKS: {
       console.log('GET_TASKS action being handled!');
-      return {...state};
+      return {
+        ...state,
+        loading: true
+      };
+    }
+
+    case TasksActionTypes.GET_TASKS_SUCCESS: {
+      console.log('GET_TASKS_SUCCESS action being handled!');
+      const data = [...<Array<TaskModel>>action.payload];
+      return {
+        ...state,
+        data,
+        loading: false,
+        loaded: true
+      };
+
+    }
+
+    case TasksActionTypes.GET_TASKS_ERROR: {
+      console.log('GET_TASKS_ERROR action being handled!');
+      const error = action.payload;
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error
+      };
     }
 
     case TasksActionTypes.CREATE_TASK: {
