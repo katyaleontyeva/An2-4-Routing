@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 
 import { TaskModel } from './../../models/task.model';
 import { TaskArrayService, TaskPromiseService } from './../../services';
+import * as TasksActions from './../../../core/+store/tasks/tasks.actions';
 
 @Component({
   templateUrl: './task-list.component.html',
@@ -26,14 +27,13 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit() {
     console.log('We have a store! ', this.store);
+    // Подписываемся на получение данных из Store
+    // При изменении State будет обновляться автоматически
     this.tasksState$ = this.store.pipe(select('tasks'));
   }
 
   onCompleteTask(task: TaskModel): void {
-    const updatedTask = { ...task, done: true };
-    // this.taskArrayService.updateTask(updatedTask);
-    this.updateTask(task)
-      .catch(err => console.log(err));
+    this.store.dispatch(new TasksActions.DoneTask(task));
   }
 
   onEditTask(task: TaskModel): void {
@@ -53,15 +53,4 @@ export class TaskListComponent implements OnInit {
       .catch(err => console.log(err));
   }
 
-  private async updateTask(task: TaskModel) {
-    const updatedTask = await this.taskPromiseService.updateTask({
-      ...task,
-      done: true
-    });
-
-    // Это чтобы не делать еще раз запрос на получение измененного массива (как в onDeleteTask)
-    const tasks: TaskModel[] = await this.tasks;
-    const index = tasks.findIndex(t => t.id === updatedTask.id);
-    tasks[index] = { ...updatedTask };
-  }
 }
