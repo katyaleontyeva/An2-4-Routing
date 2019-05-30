@@ -25,7 +25,8 @@ export function tasksReducer(
         ...state,
         data,
         loading: false,
-        loaded: true
+        loaded: true,
+        selectedTask: null
       };
 
     }
@@ -74,6 +75,26 @@ export function tasksReducer(
     case TasksActionTypes.CREATE_TASK: {
       console.log('CREATE_TASK action being handled!');
       return {...state};
+    }
+
+    case TasksActionTypes.CREATE_TASK_SUCCESS: {
+      console.log('CREATE_TASK_SUCCESS action being handled!');
+      const task = { ...<TaskModel>action.payload };
+      const data = [...state.data, task];
+
+      return {
+        ...state,
+        data
+      };
+    }
+
+    case TasksActionTypes.CREATE_TASK_ERROR: {
+      console.log('CREATE_TASK_ERROR action being handled!');
+      const error = action.payload;
+      return {
+        ...state,
+        error
+      };
     }
 
     case TasksActionTypes.UPDATE_TASK: {

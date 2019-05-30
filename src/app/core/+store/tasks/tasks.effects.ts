@@ -56,6 +56,21 @@ export class TasksEffects {
   );
 
   @Effect()
+  createTask$: Observable<Action> = this.actions$.pipe(
+    ofType<TasksActions.CreateTask>(TasksActions.TasksActionTypes.CREATE_TASK),
+    pluck('payload'),
+    concatMap((payload: TaskModel) =>
+      this.taskPromiseService
+        .createTask(payload)
+        .then(task => {
+          this.router.navigate(['/home']);
+          return new TasksActions.CreateTaskSuccess(task);
+        })
+        .catch(err => new TasksActions.CreateTaskError(err))
+    )
+  );
+
+  @Effect()
   updateTask$: Observable<Action> = this.actions$.pipe(
     ofType<TasksActions.UpdateTask>(TasksActions.TasksActionTypes.UPDATE_TASK),
     pluck('payload'),
